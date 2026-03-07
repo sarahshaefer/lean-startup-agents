@@ -27,6 +27,15 @@ exports.handler = async function (event) {
 
   const data = await response.json();
 
+  // If the API returned an error, send it back so we can see what went wrong
+  if (!response.ok || !data.content) {
+    console.log("Anthropic API error:", JSON.stringify(data));
+    return {
+      statusCode: 502,
+      body: JSON.stringify({ error: data.error?.message || JSON.stringify(data) })
+    };
+  }
+
   // Send the response back to the browser
   return {
     statusCode: 200,
