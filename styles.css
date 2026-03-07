@@ -305,6 +305,60 @@ nav {
   color: #fff;
 }
 
+/* ── Generate button ── */
+.generate-btn {
+  width: 100%;
+  padding: 14px;
+  background: #1f1f1f;
+  border: 1px solid #333;
+  border-radius: 10px;
+  color: #fff;
+  font-size: 0.95rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 16px;
+  transition: background 0.2s;
+}
+
+.generate-btn:hover {
+  background: #2a2a2a;
+}
+
+.generate-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Claude response area ── */
+.response-area {
+  display: none;
+  background: #0f0f0f;
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  padding: 20px;
+  font-size: 0.9rem;
+  line-height: 1.8;
+  color: #ccc;
+  white-space: pre-wrap;
+  margin-bottom: 28px;
+}
+
+.response-area.visible {
+  display: block;
+}
+
+.response-area.loading {
+  display: block;
+  color: #555;
+  font-style: italic;
+}
+
+.response-area.error {
+  display: block;
+  color: #e05555;
+  border-color: #3a1a1a;
+}
+
 /* ── Toast notification ── */
 .toast {
   position: fixed;

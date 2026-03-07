@@ -80,27 +80,24 @@
           <div class="questions">
             <div class="question">
               <label>Who is suffering from this problem? List 2–3 specific customer segments.</label>
-              <textarea id="q0-0" placeholder="e.g. Freelance designers aged 25–35 who juggle multiple clients..." oninput="save()"></textarea>
+              <textarea id="q0-0" placeholder="Optional: add your own thoughts first..." oninput="save()"></textarea>
             </div>
             <div class="question">
               <label>What is the core pain? (Go beyond symptoms — what is the deeper frustration?)</label>
-              <textarea id="q0-1" placeholder="e.g. They don't lose time invoicing — they lose confidence asking to be paid..." oninput="save()"></textarea>
+              <textarea id="q0-1" placeholder="Optional: add your own thoughts first..." oninput="save()"></textarea>
             </div>
             <div class="question">
               <label>Which segment feels this pain most intensely? Why?</label>
-              <textarea id="q0-2" placeholder="e.g. Freelancers with 3+ clients feel it most because..." oninput="save()"></textarea>
+              <textarea id="q0-2" placeholder="Optional: add your own thoughts first..." oninput="save()"></textarea>
             </div>
             <div class="question">
               <label>How are they solving this today, and why is that solution failing them?</label>
-              <textarea id="q0-3" placeholder="e.g. They use spreadsheets, but this breaks down when..." oninput="save()"></textarea>
+              <textarea id="q0-3" placeholder="Optional: add your own thoughts first..." oninput="save()"></textarea>
             </div>
           </div>
 
-          <div class="prompt-box">
-            <div class="prompt-label">AI prompt for this agent</div>
-            <div class="prompt-text">You are a customer research expert embedded in the startup world. My startup idea is: "<span class="idea-ref">[your idea]</span>". Conduct a deep analysis of the pain point. Identify 2–3 customer segments, rank them by intensity of pain, describe what they're doing today to cope and why it's failing. Think beyond the obvious. Look for the hidden frustration beneath the surface problem.</div>
-            <button class="copy-btn" onclick="copyPrompt(0)">Copy prompt</button>
-          </div>
+          <button class="generate-btn" onclick="generate(0)">Generate with Claude →</button>
+          <div class="response-area" id="response-0"></div>
 
           <div class="nav-arrows">
             <div></div>
@@ -124,23 +121,20 @@
           <div class="questions">
             <div class="question">
               <label>What are 3 non-obvious ways to solve this pain? (Wild ideas welcome.)</label>
-              <textarea id="q1-0" placeholder="e.g. What if the product didn't target the user at all, but the person who causes the pain?..." oninput="save()"></textarea>
+              <textarea id="q1-0" placeholder="Optional: add your own thoughts first..." oninput="save()"></textarea>
             </div>
             <div class="question">
               <label>Which idea challenges the most assumptions about how this industry works?</label>
-              <textarea id="q1-1" placeholder="e.g. Everyone assumes the user pays — what if the employer paid instead?..." oninput="save()"></textarea>
+              <textarea id="q1-1" placeholder="Optional: add your own thoughts first..." oninput="save()"></textarea>
             </div>
             <div class="question">
               <label>What is the core value proposition in one sentence?</label>
-              <textarea id="q1-2" placeholder="e.g. We help X do Y without Z..." oninput="save()"></textarea>
+              <textarea id="q1-2" placeholder="Optional: add your own thoughts first..." oninput="save()"></textarea>
             </div>
           </div>
 
-          <div class="prompt-box">
-            <div class="prompt-label">AI prompt for this agent</div>
-            <div class="prompt-text">You are a maverick startup ideator who thinks like a first-principles disruptor. The customer pain is: "<span class="idea-ref">[paste Pain Analyst output]</span>". Generate 5 value proposition ideas. At least 3 must challenge a core assumption of this industry. Rank them by originality, not feasibility. Then pick the boldest one and write a single-sentence value proposition. Do not suggest anything that already exists.</div>
-            <button class="copy-btn" onclick="copyPrompt(1)">Copy prompt</button>
-          </div>
+          <button class="generate-btn" onclick="generate(1)">Generate with Claude →</button>
+          <div class="response-area" id="response-1"></div>
 
           <div class="nav-arrows">
             <button class="back-btn" onclick="showAgent(0)">← Pain Analyst</button>
@@ -164,23 +158,20 @@
           <div class="questions">
             <div class="question">
               <label>What are the 3 riskiest assumptions behind your value proposition?</label>
-              <textarea id="q2-0" placeholder="e.g. 1. Customers will pay £20/mo. 2. The pain is frequent enough to justify a new tool. 3. ..." oninput="save()"></textarea>
+              <textarea id="q2-0" placeholder="Optional: add your own thoughts first..." oninput="save()"></textarea>
             </div>
             <div class="question">
               <label>Which assumption, if wrong, would kill the startup fastest?</label>
-              <textarea id="q2-1" placeholder="e.g. If customers won't pay, the whole model collapses because..." oninput="save()"></textarea>
+              <textarea id="q2-1" placeholder="Optional: add your own thoughts first..." oninput="save()"></textarea>
             </div>
             <div class="question">
               <label>How could you test each assumption cheaply and quickly?</label>
-              <textarea id="q2-2" placeholder="e.g. Run 10 customer interviews this week to validate willingness to pay..." oninput="save()"></textarea>
+              <textarea id="q2-2" placeholder="Optional: add your own thoughts first..." oninput="save()"></textarea>
             </div>
           </div>
 
-          <div class="prompt-box">
-            <div class="prompt-label">AI prompt for this agent</div>
-            <div class="prompt-text">You are a lean startup hypothesis engineer. My value proposition is: "<span class="idea-ref">[paste Maverick Ideator output]</span>". Identify the 5 most critical assumptions that must be true for this to succeed. For each, write it as a testable hypothesis (e.g. "We believe that X will do Y because Z"). Rank them by risk. Identify the single most dangerous assumption and propose the cheapest way to test it within 2 weeks.</div>
-            <button class="copy-btn" onclick="copyPrompt(2)">Copy prompt</button>
-          </div>
+          <button class="generate-btn" onclick="generate(2)">Generate with Claude →</button>
+          <div class="response-area" id="response-2"></div>
 
           <div class="nav-arrows">
             <button class="back-btn" onclick="showAgent(1)">← Maverick Ideator</button>
@@ -204,27 +195,24 @@
           <div class="questions">
             <div class="question">
               <label>What is the single hypothesis your MVP needs to test?</label>
-              <textarea id="q3-0" placeholder="e.g. Customers will sign up and pay before the product is built..." oninput="save()"></textarea>
+              <textarea id="q3-0" placeholder="Optional: add your own thoughts first..." oninput="save()"></textarea>
             </div>
             <div class="question">
-              <label>What is the simplest possible MVP? (Could be a landing page, a manual service, a prototype...)</label>
-              <textarea id="q3-1" placeholder="e.g. A landing page with a waitlist and a Stripe payment link..." oninput="save()"></textarea>
+              <label>What is the simplest possible MVP?</label>
+              <textarea id="q3-1" placeholder="Optional: add your own thoughts first..." oninput="save()"></textarea>
             </div>
             <div class="question">
               <label>What does success look like? What metric proves the hypothesis is true?</label>
-              <textarea id="q3-2" placeholder="e.g. 20 people pay £10 in the first 2 weeks..." oninput="save()"></textarea>
+              <textarea id="q3-2" placeholder="Optional: add your own thoughts first..." oninput="save()"></textarea>
             </div>
             <div class="question">
               <label>What will you build, and what will you do manually to simulate the product?</label>
-              <textarea id="q3-3" placeholder="e.g. Build: landing page. Simulate manually: send reports by email..." oninput="save()"></textarea>
+              <textarea id="q3-3" placeholder="Optional: add your own thoughts first..." oninput="save()"></textarea>
             </div>
           </div>
 
-          <div class="prompt-box">
-            <div class="prompt-label">AI prompt for this agent</div>
-            <div class="prompt-text">You are an MVP architect obsessed with speed and validated learning. My core hypothesis is: "<span class="idea-ref">[paste Hypothesis Engineer output]</span>". Design the most minimal experiment that could test this hypothesis within 2 weeks with under £500. It does not need to be software. Define what you'll build, what you'll fake or do manually, and what success looks like in a single measurable metric. Ruthlessly cut anything that doesn't directly test the hypothesis.</div>
-            <button class="copy-btn" onclick="copyPrompt(3)">Copy prompt</button>
-          </div>
+          <button class="generate-btn" onclick="generate(3)">Generate with Claude →</button>
+          <div class="response-area" id="response-3"></div>
 
           <div class="nav-arrows">
             <button class="back-btn" onclick="showAgent(2)">← Hypothesis Engineer</button>
@@ -248,27 +236,24 @@
           <div class="questions">
             <div class="question">
               <label>What are the 3 hardest questions a VC would ask about this idea?</label>
-              <textarea id="q4-0" placeholder="e.g. Why would anyone switch from their existing solution?..." oninput="save()"></textarea>
+              <textarea id="q4-0" placeholder="Optional: add your own thoughts first..." oninput="save()"></textarea>
             </div>
             <div class="question">
               <label>What is the biggest weakness in the business model?</label>
-              <textarea id="q4-1" placeholder="e.g. The market is too small, or the moat is unclear..." oninput="save()"></textarea>
+              <textarea id="q4-1" placeholder="Optional: add your own thoughts first..." oninput="save()"></textarea>
             </div>
             <div class="question">
               <label>What would need to be true for a VC to get excited about this?</label>
-              <textarea id="q4-2" placeholder="e.g. Proof of 10x better outcome, a clear path to 10M users..." oninput="save()"></textarea>
+              <textarea id="q4-2" placeholder="Optional: add your own thoughts first..." oninput="save()"></textarea>
             </div>
             <div class="question">
               <label>What changes would you make to the idea based on this critique?</label>
-              <textarea id="q4-3" placeholder="e.g. Narrow the target customer, reframe the pricing model..." oninput="save()"></textarea>
+              <textarea id="q4-3" placeholder="Optional: add your own thoughts first..." oninput="save()"></textarea>
             </div>
           </div>
 
-          <div class="prompt-box">
-            <div class="prompt-label">AI prompt for this agent</div>
-            <div class="prompt-text">You are a senior VC partner who has seen thousands of pitches. You are not here to be nice. Review this startup concept: "<span class="idea-ref">[paste all previous agent outputs]</span>". Ask the 5 hardest questions a founder would least want to hear. Identify the most likely reason this startup fails. Then — only if the idea survives your critique — tell me what would need to be true for you to write a cheque. Be direct, be harsh, be specific.</div>
-            <button class="copy-btn" onclick="copyPrompt(4)">Copy prompt</button>
-          </div>
+          <button class="generate-btn" onclick="generate(4)">Generate with Claude →</button>
+          <div class="response-area" id="response-4"></div>
 
           <div class="nav-arrows">
             <button class="back-btn" onclick="showAgent(3)">← MVP Architect</button>
@@ -292,27 +277,24 @@
           <div class="questions">
             <div class="question">
               <label>What is the total addressable market (TAM)? How did you estimate it?</label>
-              <textarea id="q5-0" placeholder="e.g. 50M freelancers globally × £100/yr = £5B TAM..." oninput="save()"></textarea>
+              <textarea id="q5-0" placeholder="Optional: add your own thoughts first..." oninput="save()"></textarea>
             </div>
             <div class="question">
               <label>Who are the top 3 competitors? What do they do well and poorly?</label>
-              <textarea id="q5-1" placeholder="e.g. Competitor A: great UX, weak pricing. Competitor B: ..." oninput="save()"></textarea>
+              <textarea id="q5-1" placeholder="Optional: add your own thoughts first..." oninput="save()"></textarea>
             </div>
             <div class="question">
               <label>Is the core technology feasible today? Any major technical risks?</label>
-              <textarea id="q5-2" placeholder="e.g. The AI model needed exists (GPT-4), but real-time processing may be costly..." oninput="save()"></textarea>
+              <textarea id="q5-2" placeholder="Optional: add your own thoughts first..." oninput="save()"></textarea>
             </div>
             <div class="question">
               <label>What trends make now the right time for this idea?</label>
-              <textarea id="q5-3" placeholder="e.g. Remote work growth, rise of the creator economy, new regulation in X..." oninput="save()"></textarea>
+              <textarea id="q5-3" placeholder="Optional: add your own thoughts first..." oninput="save()"></textarea>
             </div>
           </div>
 
-          <div class="prompt-box">
-            <div class="prompt-label">AI prompt for this agent</div>
-            <div class="prompt-text">You are a rigorous market research analyst. Research the following startup idea: "<span class="idea-ref">[your idea]</span>". Provide: (1) a bottom-up estimate of the total addressable market, (2) the top 3–5 direct and indirect competitors with their strengths and weaknesses, (3) an honest assessment of technical feasibility, (4) 3 macro trends that make this timing good or bad. Cite specific numbers where possible. Be neutral — neither a cheerleader nor a pessimist.</div>
-            <button class="copy-btn" onclick="copyPrompt(5)">Copy prompt</button>
-          </div>
+          <button class="generate-btn" onclick="generate(5)">Generate with Claude →</button>
+          <div class="response-area" id="response-5"></div>
 
           <div class="nav-arrows">
             <button class="back-btn" onclick="showAgent(4)">← VC Critic</button>
@@ -324,7 +306,7 @@
     </main>
   </div>
 
-  <div class="toast" id="toast">Prompt copied!</div>
+  <div class="toast" id="toast">Copied!</div>
 
   <script src="script.js"></script>
 </body>
