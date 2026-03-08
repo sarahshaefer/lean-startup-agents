@@ -1,12 +1,8 @@
 // Stores the AI-generated response for each agent (by index)
-<<<<<<< HEAD
 let responses = ["", "", "", "", "", "", ""];
 
 // Stores follow-up conversation history per agent
 let chatHistories = [[], [], [], [], [], [], []];
-=======
-let responses = ["", "", "", "", "", ""];
->>>>>>> b1c68d45d1a353fe436319c9fb01b88caf4807c2
 
 // ─── Show / hide agents ───────────────────────────────────────────────────────
 
@@ -26,105 +22,82 @@ function showAgent(index) {
 function buildPrompt(index) {
   const idea = document.getElementById("startupIdea").value || "not specified";
 
-  // Collect any notes the user typed in the text boxes for this agent
   const notes = [];
   document.querySelectorAll("#agent-" + index + " textarea").forEach(function (ta) {
     if (ta.value.trim()) notes.push(ta.value.trim());
   });
   const userNotes = notes.length ? "\n\nUser's own notes:\n" + notes.join("\n") : "";
 
-  // Previous agent outputs (used to pass context between agents)
   const pain      = responses[0] ? "\n\nPain Analyst output:\n" + responses[0] : "";
   const ideation  = responses[1] ? "\n\nMaverick Ideator output:\n" + responses[1] : "";
   const hypotheses = responses[2] ? "\n\nHypothesis Engineer output:\n" + responses[2] : "";
   const mvp       = responses[3] ? "\n\nMVP Architect output:\n" + responses[3] : "";
-<<<<<<< HEAD
   const vcCritic  = responses[4] ? "\n\nVC Critic output:\n" + responses[4] : "";
   const research  = responses[5] ? "\n\nResearch Scout output:\n" + responses[5] : "";
-=======
->>>>>>> b1c68d45d1a353fe436319c9fb01b88caf4807c2
 
   const prompts = [
-    // Agent 0: Pain Analyst
     `You are a customer research expert embedded in the startup world.
 Startup idea: "${idea}"${userNotes}
 
 Conduct a deep analysis of the pain point. Identify 2–3 customer segments, rank them by intensity of pain, describe what they're doing today to cope and why it's failing. Think beyond the obvious — look for the hidden frustration beneath the surface problem. Be specific and concrete.`,
 
-    // Agent 1: Maverick Ideator
     `You are a maverick startup ideator who thinks like a first-principles disruptor.
 Startup idea: "${idea}"${pain}${userNotes}
 
 Generate 5 value proposition ideas. At least 3 must challenge a core assumption of this industry. Rank them by originality, not feasibility. Then pick the boldest one and write a single-sentence value proposition. Do not suggest anything that already exists.`,
 
-    // Agent 2: Hypothesis Engineer
     `You are a lean startup hypothesis engineer.
 Startup idea: "${idea}"${pain}${ideation}${userNotes}
 
 Identify the 5 most critical assumptions that must be true for this to succeed. Write each as a testable hypothesis: "We believe that X will do Y because Z." Rank by risk. Identify the single most dangerous assumption and propose the cheapest way to test it within 2 weeks.`,
 
-    // Agent 3: MVP Architect
     `You are an MVP architect obsessed with speed and validated learning.
 Startup idea: "${idea}"${pain}${ideation}${hypotheses}${userNotes}
 
 Design the most minimal experiment to test the riskiest hypothesis within 2 weeks for under £500. It does not need to be software. Define: what you'll build, what you'll fake manually, and what success looks like in one measurable metric. Ruthlessly cut anything that doesn't directly test the hypothesis.`,
 
-    // Agent 4: VC Critic
     `You are a senior VC partner who has seen thousands of pitches. You are not here to be nice.
 Startup idea: "${idea}"${pain}${ideation}${hypotheses}${mvp}${userNotes}
 
 Ask the 5 hardest questions a founder would least want to hear. Identify the most likely reason this startup fails. Then — only if the idea survives your critique — state what would need to be true for you to write a cheque. Be direct, harsh, and specific.`,
 
-    // Agent 5: Research Scout
     `You are a rigorous market research analyst.
 Startup idea: "${idea}"${userNotes}
 
-<<<<<<< HEAD
 Provide: (1) a bottom-up estimate of the total addressable market with numbers, (2) the top 3–5 direct and indirect competitors with their strengths and weaknesses, (3) an honest assessment of technical feasibility, (4) 3 macro trends that make this timing good or bad. Be neutral — neither cheerleader nor pessimist.`,
 
-    // Agent 6: Product Architect
     `You are a product strategist who specialises in turning founder insights into scalable software products.
 Startup idea: "${idea}"${pain}${vcCritic}${userNotes}
 
 The VC Critic has likely flagged that this looks like a consulting business, not a scalable product. Your job is to fix that.
 
 Generate 5 concrete product ideas rooted in the pain points above. Be concise — 3-4 sentences per idea. Each must: (1) work without the founder personally doing the work, (2) be buildable today, (3) scale. For each, state: what it does, who pays and roughly how much, and what the moat is. Then pick the strongest one and give a 5-step, 30-day action plan to get a first paying customer.`
-=======
-Provide: (1) a bottom-up estimate of the total addressable market with numbers, (2) the top 3–5 direct and indirect competitors with their strengths and weaknesses, (3) an honest assessment of technical feasibility, (4) 3 macro trends that make this timing good or bad. Be neutral — neither cheerleader nor pessimist.`
->>>>>>> b1c68d45d1a353fe436319c9fb01b88caf4807c2
   ];
 
   return prompts[index];
 }
 
-<<<<<<< HEAD
 // ─── Append a chat bubble ─────────────────────────────────────────────────────
 
 function appendChatBubble(chatArea, role, text) {
   const msg = document.createElement("div");
   msg.className = "chat-message " + role;
   msg.textContent = text;
-  // Insert before the input row (always the last child)
   chatArea.insertBefore(msg, chatArea.lastChild);
 }
 
 // ─── Display a response with a copy button and follow-up chat ────────────────
-=======
-// ─── Display a response with a copy button ───────────────────────────────────
->>>>>>> b1c68d45d1a353fe436319c9fb01b88caf4807c2
 
 function showResponse(index, text) {
   const area = document.getElementById("response-" + index);
   area.className = "response-area visible";
   area.innerHTML = "";
 
-  // The response text
   const p = document.createElement("p");
   p.style.whiteSpace = "pre-wrap";
   p.textContent = text;
   area.appendChild(p);
 
-  // Copy button
   const btn = document.createElement("button");
   btn.className = "copy-response-btn";
   btn.textContent = "Copy response";
@@ -135,20 +108,16 @@ function showResponse(index, text) {
     });
   };
   area.appendChild(btn);
-<<<<<<< HEAD
 
-  // Follow-up chat area
   const chatArea = document.createElement("div");
   chatArea.className = "chat-area";
 
-  // Restore any previous conversation
   if (chatHistories[index] && chatHistories[index].length > 0) {
     chatHistories[index].forEach(function (msg) {
       appendChatBubble(chatArea, msg.role, msg.content);
     });
   }
 
-  // Input row
   const inputRow = document.createElement("div");
   inputRow.className = "chat-input-row";
 
@@ -186,16 +155,13 @@ async function followUp(index, question, chatArea, askBtn) {
   askBtn.disabled = true;
   askBtn.textContent = "Thinking...";
 
-  // Show user's question
   appendChatBubble(chatArea, "user", question);
 
-  // Show thinking indicator
   const thinking = document.createElement("div");
   thinking.className = "chat-message assistant chat-thinking";
   thinking.textContent = "Claude is thinking...";
   chatArea.insertBefore(thinking, chatArea.lastChild);
 
-  // Build full conversation: original prompt → original response → chat history → new question
   const messages = [
     { role: "user", content: buildPrompt(index) },
     { role: "assistant", content: responses[index] }
@@ -205,7 +171,6 @@ async function followUp(index, question, chatArea, askBtn) {
   });
   messages.push({ role: "user", content: question });
 
-  // Save question to history
   chatHistories[index].push({ role: "user", content: question });
 
   const jobId = "job-" + Date.now() + "-" + Math.random().toString(36).slice(2);
@@ -227,13 +192,11 @@ async function followUp(index, question, chatArea, askBtn) {
   } catch (error) {
     thinking.className = "chat-message assistant error";
     thinking.textContent = "Error: " + error.message;
-    chatHistories[index].pop(); // remove failed user message from history
+    chatHistories[index].pop();
   }
 
   askBtn.disabled = false;
   askBtn.textContent = "Ask →";
-=======
->>>>>>> b1c68d45d1a353fe436319c9fb01b88caf4807c2
 }
 
 // ─── Call Claude via background function + polling ────────────────────────────
@@ -248,27 +211,22 @@ async function generate(index) {
   const responseArea = document.getElementById("response-" + index);
   const btn = document.querySelector("#agent-" + index + " .generate-btn");
 
-  // Create a unique ID for this job
   const jobId = "job-" + Date.now() + "-" + Math.random().toString(36).slice(2);
 
-  // Show loading state
   btn.disabled = true;
   btn.textContent = "Thinking...";
   responseArea.className = "response-area loading";
   responseArea.textContent = "Claude is thinking... this may take up to a minute for deep analysis.";
 
   try {
-    // Fire off the background function (returns immediately with 202)
     await fetch("/.netlify/functions/claude-background", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ prompt: buildPrompt(index), jobId: jobId })
     });
 
-    // Poll every 2 seconds until the result is ready
     const result = await pollForResult(jobId, responseArea);
 
-    // Store and display the response
     responses[index] = result;
     saveResponses();
     showResponse(index, result);
@@ -282,16 +240,16 @@ async function generate(index) {
   btn.textContent = "Regenerate →";
 }
 
-// Polls the result endpoint every 2 seconds until Claude is done
+// ─── Poll for result ──────────────────────────────────────────────────────────
+
 function pollForResult(jobId, responseArea) {
   return new Promise(function (resolve, reject) {
     let attempts = 0;
-    const maxAttempts = 150; // ~5 minutes max
+    const maxAttempts = 150;
 
     const interval = setInterval(async function () {
       attempts++;
 
-      // Update the loading message so the user knows it's still working
       if (attempts % 5 === 0) {
         const seconds = attempts * 2;
         responseArea.textContent = "Claude is thinking... (" + seconds + "s)";
@@ -314,7 +272,6 @@ function pollForResult(jobId, responseArea) {
           clearInterval(interval);
           reject(new Error(data.error || "Claude returned an error."));
         }
-        // If status is "pending", keep polling
       } catch (err) {
         // Network blip — keep trying
       }
@@ -336,13 +293,10 @@ function saveResponses() {
   localStorage.setItem("agentResponses", JSON.stringify(responses));
 }
 
-<<<<<<< HEAD
 function saveChatHistories() {
   localStorage.setItem("agentChatHistories", JSON.stringify(chatHistories));
 }
 
-=======
->>>>>>> b1c68d45d1a353fe436319c9fb01b88caf4807c2
 function load() {
   const saved = localStorage.getItem("agentWorkflow");
   if (saved) {
@@ -353,22 +307,18 @@ function load() {
     });
   }
 
-  // Restore previous AI responses
   const savedResponses = localStorage.getItem("agentResponses");
   if (savedResponses) {
     responses = JSON.parse(savedResponses);
-<<<<<<< HEAD
     while (responses.length < 7) responses.push("");
   }
 
-  // Restore chat histories
   const savedChats = localStorage.getItem("agentChatHistories");
   if (savedChats) {
     chatHistories = JSON.parse(savedChats);
     while (chatHistories.length < 7) chatHistories.push([]);
   }
 
-  // Render all saved responses (also restores the chat UI)
   responses.forEach(function (text, index) {
     if (text) {
       showResponse(index, text);
@@ -376,29 +326,15 @@ function load() {
       if (btn) btn.textContent = "Regenerate →";
     }
   });
-=======
-    responses.forEach(function (text, index) {
-      if (text) {
-        showResponse(index, text);
-        const btn = document.querySelector("#agent-" + index + " .generate-btn");
-        if (btn) btn.textContent = "Regenerate →";
-      }
-    });
-  }
->>>>>>> b1c68d45d1a353fe436319c9fb01b88caf4807c2
 }
 
 function clearAll() {
   if (confirm("Clear all your notes and generated responses?")) {
     localStorage.removeItem("agentWorkflow");
     localStorage.removeItem("agentResponses");
-<<<<<<< HEAD
     localStorage.removeItem("agentChatHistories");
     responses = ["", "", "", "", "", "", ""];
     chatHistories = [[], [], [], [], [], [], []];
-=======
-    responses = ["", "", "", "", "", ""];
->>>>>>> b1c68d45d1a353fe436319c9fb01b88caf4807c2
     document.getElementById("startupIdea").value = "";
     document.querySelectorAll("textarea").forEach(function (ta) { ta.value = ""; });
     document.querySelectorAll(".response-area").forEach(function (r) {

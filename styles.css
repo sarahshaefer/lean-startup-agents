@@ -377,7 +377,6 @@ nav {
   color: #ccc;
 }
 
-<<<<<<< HEAD
 /* ── Follow-up chat ── */
 .chat-area {
   margin-top: 20px;
@@ -462,8 +461,6 @@ nav {
   cursor: not-allowed;
 }
 
-=======
->>>>>>> b1c68d45d1a353fe436319c9fb01b88caf4807c2
 /* ── Toast notification ── */
 .toast {
   position: fixed;
