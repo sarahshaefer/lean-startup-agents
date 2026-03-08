@@ -12,7 +12,11 @@ exports.handler = async function (event) {
   }
 
   try {
-    const store = getStore("jobs");
+    const store = getStore({
+      name: "jobs",
+      siteID: process.env.SITE_ID,
+      token: process.env.NETLIFY_TOKEN
+    });
     const raw = await store.get(jobId);
 
     // Not ready yet

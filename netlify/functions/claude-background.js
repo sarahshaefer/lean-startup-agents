@@ -4,7 +4,11 @@ const { getStore } = require("@netlify/blobs");
 
 exports.handler = async function (event) {
   const { prompt, jobId } = JSON.parse(event.body);
-  const store = getStore("jobs");
+  const store = getStore({
+    name: "jobs",
+    siteID: process.env.SITE_ID,
+    token: process.env.NETLIFY_TOKEN
+  });
 
   try {
     // Mark the job as in-progress
