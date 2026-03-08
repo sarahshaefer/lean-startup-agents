@@ -73,7 +73,7 @@ Provide: (1) a bottom-up estimate of the total addressable market with numbers, 
   return prompts[index];
 }
 
-// ─── Call Claude via the Netlify function ─────────────────────────────────────
+// ─── Call Claude via background function + polling ────────────────────────────
 
 async function generate(index) {
   const idea = document.getElementById("startupIdea").value.trim();
@@ -85,37 +85,79 @@ async function generate(index) {
   const responseArea = document.getElementById("response-" + index);
   const btn = document.querySelector("#agent-" + index + " .generate-btn");
 
+  // Create a unique ID for this job
+  const jobId = "job-" + Date.now() + "-" + Math.random().toString(36).slice(2);
+
   // Show loading state
   btn.disabled = true;
   btn.textContent = "Thinking...";
   responseArea.className = "response-area loading";
-  responseArea.textContent = "Claude is analysing your idea...";
+  responseArea.textContent = "Claude is thinking... this may take up to a minute for deep analysis.";
 
   try {
-    const result = await fetch("/.netlify/functions/claude", {
+    // Fire off the background function (returns immediately with 202)
+    await fetch("/.netlify/functions/claude-background", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: buildPrompt(index) })
+      body: JSON.stringify({ prompt: buildPrompt(index), jobId: jobId })
     });
 
-    const data = await result.json();
+    // Poll every 2 seconds until the result is ready
+    const result = await pollForResult(jobId, responseArea);
 
-    // Store the response so later agents can use it as context
-    responses[index] = data.result;
+    // Store and display the response
+    responses[index] = result;
     saveResponses();
-
-    // Display the response
     responseArea.className = "response-area visible";
-    responseArea.textContent = data.result;
+    responseArea.textContent = result;
 
   } catch (error) {
     responseArea.className = "response-area error";
-    responseArea.textContent = "Something went wrong. Make sure your API key is set in Netlify.";
+    responseArea.textContent = "Something went wrong: " + error.message;
   }
 
-  // Reset button
   btn.disabled = false;
   btn.textContent = "Regenerate →";
+}
+
+// Polls the result endpoint every 2 seconds until Claude is done
+function pollForResult(jobId, responseArea) {
+  return new Promise(function (resolve, reject) {
+    let attempts = 0;
+    const maxAttempts = 150; // ~5 minutes max
+
+    const interval = setInterval(async function () {
+      attempts++;
+
+      // Update the loading message so the user knows it's still working
+      if (attempts % 5 === 0) {
+        const seconds = attempts * 2;
+        responseArea.textContent = "Claude is thinking... (" + seconds + "s)";
+      }
+
+      if (attempts > maxAttempts) {
+        clearInterval(interval);
+        reject(new Error("Timed out waiting for Claude. Please try again."));
+        return;
+      }
+
+      try {
+        const res = await fetch("/.netlify/functions/poll?jobId=" + jobId);
+        const data = await res.json();
+
+        if (data.status === "done") {
+          clearInterval(interval);
+          resolve(data.result);
+        } else if (data.status === "error") {
+          clearInterval(interval);
+          reject(new Error(data.error || "Claude returned an error."));
+        }
+        // If status is "pending", keep polling
+      } catch (err) {
+        // Network blip — keep trying
+      }
+    }, 2000);
+  });
 }
 
 // ─── Save & load ──────────────────────────────────────────────────────────────
