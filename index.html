@@ -45,6 +45,13 @@
           <span class="nav-icon">📡</span>
           <span>Research Scout</span>
         </button>
+<<<<<<< HEAD
+        <button class="nav-btn" onclick="showAgent(6)">
+          <span class="nav-icon">🏗️</span>
+          <span>Product Architect</span>
+        </button>
+=======
+>>>>>>> b1c68d45d1a353fe436319c9fb01b88caf4807c2
       </nav>
 
       <div class="sidebar-footer">
@@ -298,6 +305,46 @@
 
           <div class="nav-arrows">
             <button class="back-btn" onclick="showAgent(4)">← VC Critic</button>
+<<<<<<< HEAD
+            <button class="next-btn" onclick="showAgent(6)">Next: Product Architect →</button>
+          </div>
+        </div>
+
+        <!-- Agent 6: Product Architect -->
+        <div class="agent-panel" id="agent-6">
+          <div class="agent-header">
+            <div class="agent-icon">🏗️</div>
+            <div>
+              <div class="agent-name">Product Architect</div>
+              <div class="agent-role">From insight to scalable product</div>
+            </div>
+          </div>
+          <div class="agent-persona">
+            This agent takes everything the other agents have uncovered and asks one question: how do we turn this into a product that works without the founder? It bridges the gap between a consulting insight and a scalable business.
+          </div>
+
+          <div class="questions">
+            <div class="question">
+              <label>What parts of your current approach could be automated or productised?</label>
+              <textarea id="q6-0" placeholder="Optional: add your own thoughts first..." oninput="save()"></textarea>
+            </div>
+            <div class="question">
+              <label>Who would pay for a product version of this, and what would they pay?</label>
+              <textarea id="q6-1" placeholder="Optional: add your own thoughts first..." oninput="save()"></textarea>
+            </div>
+            <div class="question">
+              <label>What is your unfair advantage — what do you know or have access to that others don't?</label>
+              <textarea id="q6-2" placeholder="Optional: add your own thoughts first..." oninput="save()"></textarea>
+            </div>
+          </div>
+
+          <button class="generate-btn" onclick="generate(6)">Generate with Claude →</button>
+          <div class="response-area" id="response-6"></div>
+
+          <div class="nav-arrows">
+            <button class="back-btn" onclick="showAgent(5)">← Research Scout</button>
+=======
+>>>>>>> b1c68d45d1a353fe436319c9fb01b88caf4807c2
             <div></div>
           </div>
         </div>

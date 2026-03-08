@@ -1,5 +1,12 @@
 // Stores the AI-generated response for each agent (by index)
+<<<<<<< HEAD
+let responses = ["", "", "", "", "", "", ""];
+
+// Stores follow-up conversation history per agent
+let chatHistories = [[], [], [], [], [], [], []];
+=======
 let responses = ["", "", "", "", "", ""];
+>>>>>>> b1c68d45d1a353fe436319c9fb01b88caf4807c2
 
 // ─── Show / hide agents ───────────────────────────────────────────────────────
 
@@ -31,6 +38,11 @@ function buildPrompt(index) {
   const ideation  = responses[1] ? "\n\nMaverick Ideator output:\n" + responses[1] : "";
   const hypotheses = responses[2] ? "\n\nHypothesis Engineer output:\n" + responses[2] : "";
   const mvp       = responses[3] ? "\n\nMVP Architect output:\n" + responses[3] : "";
+<<<<<<< HEAD
+  const vcCritic  = responses[4] ? "\n\nVC Critic output:\n" + responses[4] : "";
+  const research  = responses[5] ? "\n\nResearch Scout output:\n" + responses[5] : "";
+=======
+>>>>>>> b1c68d45d1a353fe436319c9fb01b88caf4807c2
 
   const prompts = [
     // Agent 0: Pain Analyst
@@ -67,13 +79,39 @@ Ask the 5 hardest questions a founder would least want to hear. Identify the mos
     `You are a rigorous market research analyst.
 Startup idea: "${idea}"${userNotes}
 
+<<<<<<< HEAD
+Provide: (1) a bottom-up estimate of the total addressable market with numbers, (2) the top 3–5 direct and indirect competitors with their strengths and weaknesses, (3) an honest assessment of technical feasibility, (4) 3 macro trends that make this timing good or bad. Be neutral — neither cheerleader nor pessimist.`,
+
+    // Agent 6: Product Architect
+    `You are a product strategist who specialises in turning founder insights into scalable software products.
+Startup idea: "${idea}"${pain}${vcCritic}${userNotes}
+
+The VC Critic has likely flagged that this looks like a consulting business, not a scalable product. Your job is to fix that.
+
+Generate 5 concrete product ideas rooted in the pain points above. Be concise — 3-4 sentences per idea. Each must: (1) work without the founder personally doing the work, (2) be buildable today, (3) scale. For each, state: what it does, who pays and roughly how much, and what the moat is. Then pick the strongest one and give a 5-step, 30-day action plan to get a first paying customer.`
+=======
 Provide: (1) a bottom-up estimate of the total addressable market with numbers, (2) the top 3–5 direct and indirect competitors with their strengths and weaknesses, (3) an honest assessment of technical feasibility, (4) 3 macro trends that make this timing good or bad. Be neutral — neither cheerleader nor pessimist.`
+>>>>>>> b1c68d45d1a353fe436319c9fb01b88caf4807c2
   ];
 
   return prompts[index];
 }
 
+<<<<<<< HEAD
+// ─── Append a chat bubble ─────────────────────────────────────────────────────
+
+function appendChatBubble(chatArea, role, text) {
+  const msg = document.createElement("div");
+  msg.className = "chat-message " + role;
+  msg.textContent = text;
+  // Insert before the input row (always the last child)
+  chatArea.insertBefore(msg, chatArea.lastChild);
+}
+
+// ─── Display a response with a copy button and follow-up chat ────────────────
+=======
 // ─── Display a response with a copy button ───────────────────────────────────
+>>>>>>> b1c68d45d1a353fe436319c9fb01b88caf4807c2
 
 function showResponse(index, text) {
   const area = document.getElementById("response-" + index);
@@ -97,6 +135,105 @@ function showResponse(index, text) {
     });
   };
   area.appendChild(btn);
+<<<<<<< HEAD
+
+  // Follow-up chat area
+  const chatArea = document.createElement("div");
+  chatArea.className = "chat-area";
+
+  // Restore any previous conversation
+  if (chatHistories[index] && chatHistories[index].length > 0) {
+    chatHistories[index].forEach(function (msg) {
+      appendChatBubble(chatArea, msg.role, msg.content);
+    });
+  }
+
+  // Input row
+  const inputRow = document.createElement("div");
+  inputRow.className = "chat-input-row";
+
+  const input = document.createElement("textarea");
+  input.className = "followup-input";
+  input.placeholder = "Ask a follow-up question... (Enter to send, Shift+Enter for new line)";
+  input.rows = 2;
+
+  const askBtn = document.createElement("button");
+  askBtn.className = "followup-btn";
+  askBtn.textContent = "Ask →";
+  askBtn.onclick = function () {
+    const question = input.value.trim();
+    if (!question) return;
+    input.value = "";
+    followUp(index, question, chatArea, askBtn);
+  };
+
+  input.addEventListener("keydown", function (e) {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      askBtn.click();
+    }
+  });
+
+  inputRow.appendChild(input);
+  inputRow.appendChild(askBtn);
+  chatArea.appendChild(inputRow);
+  area.appendChild(chatArea);
+}
+
+// ─── Follow-up conversation ───────────────────────────────────────────────────
+
+async function followUp(index, question, chatArea, askBtn) {
+  askBtn.disabled = true;
+  askBtn.textContent = "Thinking...";
+
+  // Show user's question
+  appendChatBubble(chatArea, "user", question);
+
+  // Show thinking indicator
+  const thinking = document.createElement("div");
+  thinking.className = "chat-message assistant chat-thinking";
+  thinking.textContent = "Claude is thinking...";
+  chatArea.insertBefore(thinking, chatArea.lastChild);
+
+  // Build full conversation: original prompt → original response → chat history → new question
+  const messages = [
+    { role: "user", content: buildPrompt(index) },
+    { role: "assistant", content: responses[index] }
+  ];
+  chatHistories[index].forEach(function (msg) {
+    messages.push(msg);
+  });
+  messages.push({ role: "user", content: question });
+
+  // Save question to history
+  chatHistories[index].push({ role: "user", content: question });
+
+  const jobId = "job-" + Date.now() + "-" + Math.random().toString(36).slice(2);
+
+  try {
+    await fetch("/.netlify/functions/claude-background", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: messages, jobId: jobId })
+    });
+
+    const result = await pollForResult(jobId, thinking);
+    chatHistories[index].push({ role: "assistant", content: result });
+    saveChatHistories();
+
+    thinking.className = "chat-message assistant";
+    thinking.textContent = result;
+
+  } catch (error) {
+    thinking.className = "chat-message assistant error";
+    thinking.textContent = "Error: " + error.message;
+    chatHistories[index].pop(); // remove failed user message from history
+  }
+
+  askBtn.disabled = false;
+  askBtn.textContent = "Ask →";
+=======
+>>>>>>> b1c68d45d1a353fe436319c9fb01b88caf4807c2
 }
 
 // ─── Call Claude via background function + polling ────────────────────────────
@@ -199,6 +336,13 @@ function saveResponses() {
   localStorage.setItem("agentResponses", JSON.stringify(responses));
 }
 
+<<<<<<< HEAD
+function saveChatHistories() {
+  localStorage.setItem("agentChatHistories", JSON.stringify(chatHistories));
+}
+
+=======
+>>>>>>> b1c68d45d1a353fe436319c9fb01b88caf4807c2
 function load() {
   const saved = localStorage.getItem("agentWorkflow");
   if (saved) {
@@ -213,6 +357,26 @@ function load() {
   const savedResponses = localStorage.getItem("agentResponses");
   if (savedResponses) {
     responses = JSON.parse(savedResponses);
+<<<<<<< HEAD
+    while (responses.length < 7) responses.push("");
+  }
+
+  // Restore chat histories
+  const savedChats = localStorage.getItem("agentChatHistories");
+  if (savedChats) {
+    chatHistories = JSON.parse(savedChats);
+    while (chatHistories.length < 7) chatHistories.push([]);
+  }
+
+  // Render all saved responses (also restores the chat UI)
+  responses.forEach(function (text, index) {
+    if (text) {
+      showResponse(index, text);
+      const btn = document.querySelector("#agent-" + index + " .generate-btn");
+      if (btn) btn.textContent = "Regenerate →";
+    }
+  });
+=======
     responses.forEach(function (text, index) {
       if (text) {
         showResponse(index, text);
@@ -221,13 +385,20 @@ function load() {
       }
     });
   }
+>>>>>>> b1c68d45d1a353fe436319c9fb01b88caf4807c2
 }
 
 function clearAll() {
   if (confirm("Clear all your notes and generated responses?")) {
     localStorage.removeItem("agentWorkflow");
     localStorage.removeItem("agentResponses");
+<<<<<<< HEAD
+    localStorage.removeItem("agentChatHistories");
+    responses = ["", "", "", "", "", "", ""];
+    chatHistories = [[], [], [], [], [], [], []];
+=======
     responses = ["", "", "", "", "", ""];
+>>>>>>> b1c68d45d1a353fe436319c9fb01b88caf4807c2
     document.getElementById("startupIdea").value = "";
     document.querySelectorAll("textarea").forEach(function (ta) { ta.value = ""; });
     document.querySelectorAll(".response-area").forEach(function (r) {
