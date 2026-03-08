@@ -359,6 +359,24 @@ nav {
   border-color: #3a1a1a;
 }
 
+/* Copy response button */
+.response-area .copy-response-btn {
+  display: block;
+  margin-top: 14px;
+  padding: 7px 16px;
+  background: #1f1f1f;
+  border: 1px solid #333;
+  border-radius: 6px;
+  color: #888;
+  font-size: 0.8rem;
+  cursor: pointer;
+}
+
+.response-area .copy-response-btn:hover {
+  background: #2a2a2a;
+  color: #ccc;
+}
+
 /* ── Toast notification ── */
 .toast {
   position: fixed;

@@ -73,6 +73,32 @@ Provide: (1) a bottom-up estimate of the total addressable market with numbers, 
   return prompts[index];
 }
 
+// ─── Display a response with a copy button ───────────────────────────────────
+
+function showResponse(index, text) {
+  const area = document.getElementById("response-" + index);
+  area.className = "response-area visible";
+  area.innerHTML = "";
+
+  // The response text
+  const p = document.createElement("p");
+  p.style.whiteSpace = "pre-wrap";
+  p.textContent = text;
+  area.appendChild(p);
+
+  // Copy button
+  const btn = document.createElement("button");
+  btn.className = "copy-response-btn";
+  btn.textContent = "Copy response";
+  btn.onclick = function () {
+    navigator.clipboard.writeText(text).then(function () {
+      btn.textContent = "Copied!";
+      setTimeout(function () { btn.textContent = "Copy response"; }, 2000);
+    });
+  };
+  area.appendChild(btn);
+}
+
 // ─── Call Claude via background function + polling ────────────────────────────
 
 async function generate(index) {
@@ -108,8 +134,7 @@ async function generate(index) {
     // Store and display the response
     responses[index] = result;
     saveResponses();
-    responseArea.className = "response-area visible";
-    responseArea.textContent = result;
+    showResponse(index, result);
 
   } catch (error) {
     responseArea.className = "response-area error";
@@ -190,10 +215,7 @@ function load() {
     responses = JSON.parse(savedResponses);
     responses.forEach(function (text, index) {
       if (text) {
-        const area = document.getElementById("response-" + index);
-        area.className = "response-area visible";
-        area.textContent = text;
-        // Update the button to say Regenerate
+        showResponse(index, text);
         const btn = document.querySelector("#agent-" + index + " .generate-btn");
         if (btn) btn.textContent = "Regenerate →";
       }
