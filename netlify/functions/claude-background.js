@@ -3,7 +3,8 @@
 const { getStore } = require("@netlify/blobs");
 
 exports.handler = async function (event) {
-  const { prompt, jobId } = JSON.parse(event.body);
+  const { prompt, messages: msgs, jobId } = JSON.parse(event.body);
+  const messages = msgs || [{ role: "user", content: prompt }];
   const store = getStore({
     name: "jobs",
     siteID: process.env.SITE_ID,
@@ -24,8 +25,8 @@ exports.handler = async function (event) {
       },
       body: JSON.stringify({
         model: "claude-opus-4-6",
-        max_tokens: 4096,
-        messages: [{ role: "user", content: prompt }]
+        max_tokens: 6000,
+        messages: messages
       })
     });
 
