@@ -1,66 +1,50 @@
-// Uses Node's built-in https module instead of fetch (works on all Node versions)
-const https = require("https");
-
 exports.handler = async function (event) {
   if (event.httpMethod !== "POST") {
     return { statusCode: 405, body: "Method not allowed" };
   }
 
-  const { prompt } = JSON.parse(event.body);
+  try {
+    const { prompt } = JSON.parse(event.body);
+    console.log("Function called, prompt length:", prompt.length);
+    console.log("API key present:", !!process.env.ANTHROPIC_API_KEY);
 
-  const body = JSON.stringify({
-    model: "claude-haiku-4-5-20251001",
-    max_tokens: 1500,
-    messages: [{ role: "user", content: prompt }]
-  });
-
-  return new Promise(function (resolve) {
-    const options = {
-      hostname: "api.anthropic.com",
-      path: "/v1/messages",
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
         "x-api-key": process.env.ANTHROPIC_API_KEY,
-        "anthropic-version": "2023-06-01",
-        "Content-Length": Buffer.byteLength(body)
-      }
+        "anthropic-version": "2023-06-01"
+      },
+      body: JSON.stringify({
+        model: "claude-haiku-4-5-20251001",
+        max_tokens: 1500,
+        messages: [{ role: "user", content: prompt }]
+      })
+    });
+
+    console.log("Anthropic status:", response.status);
+    const data = await response.json();
+    console.log("Anthropic response:", JSON.stringify(data).slice(0, 200));
+
+    if (data.content && data.content[0]) {
+      return {
+        statusCode: 200,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ result: data.content[0].text })
+      };
+    } else {
+      return {
+        statusCode: 502,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ error: data.error?.message || "Unknown error" })
+      };
+    }
+  } catch (err) {
+    console.log("Caught error:", err.message);
+    return {
+      statusCode: 500,
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ error: err.message })
     };
-
-    const req = https.request(options, function (res) {
-      let data = "";
-      res.on("data", function (chunk) { data += chunk; });
-      res.on("end", function () {
-        try {
-          const parsed = JSON.parse(data);
-          console.log("Anthropic response:", JSON.stringify(parsed).slice(0, 200));
-
-          if (parsed.content && parsed.content[0]) {
-            resolve({
-              statusCode: 200,
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ result: parsed.content[0].text })
-            });
-          } else {
-            resolve({
-              statusCode: 502,
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify({ error: parsed.error?.message || data })
-            });
-          }
-        } catch (e) {
-          console.log("Parse error:", e.message);
-          resolve({ statusCode: 500, body: JSON.stringify({ error: e.message }) });
-        }
-      });
-    });
-
-    req.on("error", function (e) {
-      console.log("Request error:", e.message);
-      resolve({ statusCode: 500, body: JSON.stringify({ error: e.message }) });
-    });
-
-    req.write(body);
-    req.end();
-  });
+  }
 };
