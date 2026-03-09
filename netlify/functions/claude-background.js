@@ -3,7 +3,7 @@
 const { getStore } = require("@netlify/blobs");
 
 exports.handler = async function (event) {
-  const { prompt, messages: msgs, jobId } = JSON.parse(event.body);
+  const { prompt, messages: msgs, jobId, agentIndex } = JSON.parse(event.body);
   const messages = msgs || [{ role: "user", content: prompt }];
   const store = getStore({
     name: "jobs",
@@ -24,7 +24,7 @@ exports.handler = async function (event) {
         "anthropic-version": "2023-06-01"
       },
       body: JSON.stringify({
-        model: "claude-opus-4-6",
+        model: agentIndex === 4 || agentIndex === 6 ? "claude-opus-4-6" : "claude-haiku-4-5-20251001",
         max_tokens: 6000,
         messages: messages
       })
