@@ -179,7 +179,7 @@ async function followUp(index, question, chatArea, askBtn) {
     await fetch("/.netlify/functions/claude-background", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ messages: messages, jobId: jobId })
+      body: JSON.stringify({ messages: messages, jobId: jobId, agentIndex: index })
     });
 
     const result = await pollForResult(jobId, thinking);
@@ -222,7 +222,7 @@ async function generate(index) {
     await fetch("/.netlify/functions/claude-background", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ prompt: buildPrompt(index), jobId: jobId })
+      body: JSON.stringify({ prompt: buildPrompt(index), jobId: jobId, agentIndex: index })
     });
 
     const result = await pollForResult(jobId, responseArea);
